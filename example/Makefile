@@ -10,6 +10,8 @@ AVRDUDE_FLAGS = -F -V -c arduino
 AVR_CC = avrdude
 MEM=flash
 
+all: upload
+
 led.hex: led
 	avr-objcopy -O ihex -R .eeprom led $@
 
