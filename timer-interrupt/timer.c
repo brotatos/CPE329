@@ -24,18 +24,26 @@ int main(void) {
 
 } // end main
 
+// How would we do this in normal?
+
+/* CTC MODE 7.747kHz w/ 50% */
 void initTimer0(void) {
-   TCCR0A = 0x00; // timer overflow mode
-   /*TCCR0B = 0x05;*/ // timer clk = system clk / 1024
+   TCCR0A = 0x00;// timer overflow mode
+   TCCR0A = (1 << WGM01) | (1 << COM0A0) | (1 << COM0A1); // CTC mode
+   //TCCR0B |= 1 << CS00; // timer clk = system clk
+   // timer clk = system clk  / 8 -> 7.8kHz
    // 1khz
-   TCCR0B = 0b00000010; // timer clk = system clk / 8
-   //TCCR0B = 0b00000001; // no prescaling
+   TCCR0B = (1 << CS01) | (1 << CS00) | (1 << FOC0A);
+   // 7.752 kHz
+   //TCCR0B = (1 << CS01) | (1 << FOC0A);
+   OCR0A = 128;
    TIFR0 = 0x01;  // clear previous timer overflow
-   TIMSK0 = 0x01; // timer overflow interrupt enabled
+   TIMSK0 = 0x02; // timer overflow interrupt enabled
 }
 
-ISR(TIMER0_OVF_vect) {
-   if (myCounter == 7) {
+
+ISR(TIMER0_COMPA_vect) {
+   if (myCounter == 1) {
       myCounter = 0;
       PORTB |= 1<<PB5;
    } else {
