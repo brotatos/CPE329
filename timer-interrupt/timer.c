@@ -2,16 +2,20 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#define TRUE 1
+#define FALSE 0
+#define MAX_COUNT 127
 
 //function prototype
-void initTimer0(void);
+void initTimer0(int);
 
 // global variable declaration!
 volatile unsigned char myCounter;
 
 int main(void) {
    myCounter = 1;
-   initTimer0();
+
+   initTimer0(TRUE);
 
    DDRB |= 1<<PB5;
 
@@ -24,21 +28,18 @@ int main(void) {
 
 } // end main
 
-// How would we do this in normal?
-
-/* CTC MODE 7.747kHz w/ 50% */
-void initTimer0(void) {
-   TCCR0A = 0x00;// timer overflow mode
-   TCCR0A = (1 << WGM01) | (1 << COM0A0) | (1 << COM0A1); // CTC mode
-   //TCCR0B |= 1 << CS00; // timer clk = system clk
-   // timer clk = system clk  / 8 -> 7.8kHz
-   // 1khz
-   TCCR0B = (1 << CS01) | (1 << CS00) | (1 << FOC0A);
-   // 7.752 kHz
-   //TCCR0B = (1 << CS01) | (1 << FOC0A);
-   OCR0A = 128;
-   TIFR0 = 0x01;  // clear previous timer overflow
-   TIMSK0 = 0x02; // timer overflow interrupt enabled
+void initTimer0(int low) {
+   // timer clk = system clk / 8 = 7.8kHz
+   TCCR0B = 1 << CS01 | 1 << FOC0A;
+   if (low) {
+      // timer clk = system clk / 64 = 976Hz
+      TCCR0B |= 1 << CS00;
+   }
+   // CTC, Cmp A mode
+   TCCR0A = 1 << WGM01 | 1 << COM0A0 | 1 << COM0A1;
+   OCR0A = MAX_COUNT;      // Count up to a max of 128
+   TIFR0 = 1 << OCF0A;     // clear previous timer overflow
+   TIMSK0 = 1 << OCIE0A;   // timer overflow interrupt enabled
 }
 
 
