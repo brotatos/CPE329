@@ -3,27 +3,27 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#define WAIT_TC() _delay_us(1)
+// Wait 2000ns just to be safe.
+#define WAIT_TC() _delay_us(2) // Wait time T_C (entire cycle).
 
 
-//void lc_write_cmd(char cmd);
+void lcd_cmd(char portD);
 
 int main(void) {
    UCSR0B = 0;        // disable TX, RX
    // PB2 = RS, PB1 = R/W, PB0 = E
    DDRB = 0b00000111; // E, RS, R/W
    DDRD = 0xFF;       // Set all D pins to output
-   // Wait 40 ms for VDD to surpass 4.5V and to end busy state.
-   _delay_ms(40);
+   // Wait 60 ms for VDD to surpass 4.5V and to end busy state.
+   _delay_ms(60);
 
    PORTB = 0; //  RS, R/W, E = low
    _delay_ms(1); // Just to be safe. (Not required.)
 
+   // Begin initialization sequence.
+
    // Function set
-   //E_HIGH(PORTB);
-   PORTD = 1 << PD5 | 1 << PD4 | 1 << PD3 | 1 << PD2;
-   //WAIT_TC();
-   //E_LOW(PORTB);
+   lcd_cmd(1 << PD5 | 1 << PD4 | 1 << PD3 | 1 << PD2);
    _delay_us(60);
 
    /* Display ON/OFF Ctl
@@ -33,16 +33,21 @@ int main(void) {
     * PD1: cursor on
     * PD0: blink on
     */
-   PORTD = 1 << PD3 | 1 << PD2 | 1 << PD1 | 1 << PD0;
+   lcd_cmd(1 << PD3 | 1 << PD2 | 1 << PD1 | 1 << PD0);
    _delay_us(60);
 
    // Display clear
-   PORTD = 1 << PD0;
+   lcd_cmd(1 << PD0);
    _delay_ms(5);
 
-   // Entry Mode Set
-   PORTD = 1 << PD2;
-   // Complete initialization.
+   /* Entry Mode Set
+    * PD2: Must be high
+    * PD1: Decrement mode (cursor blinks to right)
+    * PD0: Shift mode (OFF)
+    */
+   lcd_cmd(1 << PD2 | 1 << PD1);
+
+   // Complete initialization sequence.
    _delay_ms(1);
 
    while (1) {
@@ -50,4 +55,11 @@ int main(void) {
    }
 
    return 0;
+}
+
+void lcd_cmd(char cmd) {
+   E_HIGH(PORTB);
+   PORTD = cmd;
+   WAIT_TC();
+   E_LOW(PORTB);
 }
