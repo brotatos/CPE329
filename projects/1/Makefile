@@ -2,7 +2,7 @@ CC=avr-gcc
 F_CPU=16000000UL
 MMCU=atmega328p
 OBJECTS = lcd.o message.o
-CFLAGS=-Os
+CFLAGS=-Os -Wextra -Werror -pedantic
 DEV=/dev/ttyACM0
 BAUD=115200
 OUT=message.hex
@@ -13,7 +13,7 @@ MEM=flash
 all: upload
 
 message.hex: message
-	avr-objcopy -O ihex -R .eeprom message
+	avr-objcopy -O ihex -R .eeprom message $@
 
 message: $(OBJECTS)
 	$(CC) $(CFLAGS) -mmcu=$(MMCU) $(OBJECTS) -o $@
