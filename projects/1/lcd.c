@@ -12,6 +12,16 @@ static void lcd_cmd(char cmd) {
    E_LOW(PORTB);
 }
 
+void lcd_write(char character) {
+   E_HIGH(PORTB);
+   RS_HIGH(PORTB);
+   RW_LOW(PORTB);
+   PORTD = character;
+   WAIT_TC();
+   E_LOW(PORTB);
+   _delay_ms(1);
+}
+
 void lcd_init() {
    PORTB = 0; //  RS, R/W, E = low
 
@@ -49,4 +59,6 @@ void lcd_init() {
     * PD0: Shift mode (OFF)
     */
    lcd_cmd(1 << PD2 | 1 << PD1);
+
+   _delay_ms(10); // Wait until busy state ends.
 }
