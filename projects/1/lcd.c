@@ -6,13 +6,20 @@
 #define WAIT_TC() _delay_us(2) // Wait time 2*T_C (2 entire cycle).
 
 static void lcd_cmd(char cmd) {
+   PORTB = 0;
    E_HIGH(PORTB);
    PORTD = cmd;
    WAIT_TC();
    E_LOW(PORTB);
 }
 
+void lcd_clear_display() {
+   lcd_cmd(1 << PD0);
+   _delay_ms(10);
+}
+
 void lcd_write(char character) {
+   PORTB = 0;
    E_HIGH(PORTB);
    RS_HIGH(PORTB);
    RW_LOW(PORTB);

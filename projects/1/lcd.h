@@ -14,11 +14,13 @@
 #define RW_LOW(f) (f &= 0b11111101)
 #define RS_LOW(f) (f &= 0b11111011)
 
+/* Public functions */
 void lcd_init(void);
-void lcd_write_char(char cgram_addr,
-                    char cg_content,
-                    char ddram_addr,
-                    char ddram_content);
+void lcd_return_home(void);
+void lcd_clear_display(void);
+void lcd_write(char character);
+
+/* Private functions */
 static void lcd_cmd(char cmd);
 static void lcd_write_enable();
 static void lcd_write_disable();
