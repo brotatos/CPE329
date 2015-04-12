@@ -1,7 +1,7 @@
 CC=avr-gcc
 F_CPU=16000000UL
 MMCU=atmega328p
-OBJECTS = lcd.o message.o
+OBJECTS = lcd.o message.o nibble.o
 CFLAGS=-Os -Wextra -Werror -g -MMD -mmcu=$(MMCU)
 DEV=/dev/ttyACM0
 BAUD=115200
@@ -23,6 +23,9 @@ lcd.o: lcd.c
 
 message.o: message.c
 	$(CC) $(CFLAGS) -c -o $@ message.c
+
+nibble.o: nibble.c
+	$(CC) $(CFLAGS) -c -o $@ nibble.c
 
 upload: message.hex
 	sudo $(AVR_CC) $(AVRDUDE_FLAGS) -p $(MMCU) -P $(DEV) -b $(BAUD) -U $(MEM):w:$(OUT)

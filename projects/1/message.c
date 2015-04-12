@@ -4,11 +4,16 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+void nibble_print_hello_world();
+void nibble_print(char character);
+
 int main(void) {
    char firstTime = TRUE;
    int pressed;
 
-   lcd_init();
+   nibble_lcd_init();
+   nibble_print_hello_world();
+   /*
    print_hello_world();
 
    PORTB |= 1 << BUTTON;
@@ -19,6 +24,7 @@ int main(void) {
          print_alt_message();
       }
    }
+   */
    return 0;
 }
 
@@ -34,6 +40,40 @@ void print_hello_world() {
    lcd_write(0x72); // r
    lcd_write(0x6C); // l
    lcd_write(0x64); // d
+}
+
+void nibble_print(char character) {
+   lcd_write(character & 0xF0);
+   lcd_write((character & 0x0F) << 4);
+}
+
+void nibble_print_hello_world() {
+   nibble_print(0x48); // H
+   nibble_print(0x65); // e
+   nibble_print(0x6C); // l
+   nibble_print(0x6C); // l
+   nibble_print(0x6F); // o
+   nibble_print(0x20); // blank
+   nibble_print(0x57); // W
+   nibble_print(0x6F); // o
+   nibble_print(0x72); // r
+   nibble_print(0x6C); // l
+   nibble_print(0x64); // d
+}
+
+void nibble_print_alt_message() {
+   nibble_lcd_clear_display();
+   nibble_print(0x57); // W
+   nibble_print(0x6F); // o
+   nibble_print(0x72); // r
+   nibble_print(0x6C); // l
+   nibble_print(0x64); // d
+   nibble_print(0x20); // blank
+   nibble_print(0x48); // H
+   nibble_print(0x65); // e
+   nibble_print(0x6C); // l
+   nibble_print(0x6C); // l
+   nibble_print(0x6F); // o
 }
 
 void print_alt_message() {
