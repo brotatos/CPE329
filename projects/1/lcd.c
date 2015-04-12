@@ -23,6 +23,13 @@ void lcd_write(char character) {
 }
 
 void lcd_init() {
+   UCSR0B = 0;        // disable TX, RX
+   // PB2 = RS, PB1 = R/W, PB0 = E
+   DDRB = 0b00001111; // E, RS, R/W, Button
+   DDRD = 0xFF;       // Set all D pins to output
+   // Wait 100 ms for VDD to surpass 4.5V and to end busy state.
+   _delay_ms(100);
+
    PORTB = 0; //  RS, R/W, E = low
 
    /* Function set
