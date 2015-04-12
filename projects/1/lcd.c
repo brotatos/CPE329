@@ -26,13 +26,18 @@ void lcd_write(char character) {
    PORTD = character;
    WAIT_TC();
    E_LOW(PORTB);
-   _delay_ms(1);
+   _delay_us(50); // Wait just in case for sequential writes.
 }
 
 void lcd_init() {
-   UCSR0B = 0;        // disable TX, RX
-   // PB2 = RS, PB1 = R/W, PB0 = E
-   DDRB = 0b00001111; // E, RS, R/W, Button
+   UCSR0B = 0; // disable TX, RX
+   /* PB4 = ButtonCheck    IN
+    * PB3 = Button         OUT
+    * PB2 = RS             OUT
+    * PB1 = R/W            OUT
+    * PB0 = E              OUT
+    */
+   DDRB = 0b00001111;
    DDRD = 0xFF;       // Set all D pins to output
    // Wait 100 ms for VDD to surpass 4.5V and to end busy state.
    _delay_ms(100);
