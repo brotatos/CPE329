@@ -9,7 +9,6 @@ void nibble_print(char character);
 
 int main(void) {
    char firstTime = TRUE;
-   int pressed;
 
    nibble_lcd_init();
    nibble_print_hello_world();
@@ -19,7 +18,7 @@ int main(void) {
    PORTB |= 1 << BUTTON;
 
    while (firstTime) {
-      if (PINB & (1 << BUTTON_CHECK)) { // this if statement isn't working
+      if (PINB & (1 << BUTTON_CHECK)) {
          firstTime = FALSE;
          print_alt_message();
       }
