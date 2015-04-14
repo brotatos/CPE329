@@ -20,29 +20,27 @@ int main(void) {
    Initialize_SPI_Master();
 
    while(1) {
-      //Transmit_SPI_Master(00xF);
+      Transmit_SPI_Master(0xF0);
+      _delay_ms(1000);
       Transmit_SPI_Master(0x0F);
-      _delay_ms(1200);
-      _delay_us(100);
-      Transmit_SPI_Master(0x5A);
-      _delay_ms(1200);
-      _delay_us(100);
+      _delay_ms(1000);
    }  // end while
    return 0;  // end main
- }
+}
 
 
 void Initialize_SPI_Master(void) {
    SPCR = (0<<SPIE) | //No interrupts
-      (1<<SPE) | //SPI enabled
+      (1<<SPE)  | //SPI enabled
       (0<<DORD) | //send MSB first
       (1<<MSTR) | //master
       (0<<CPOL) | //clock idles low
       (1<<CPHA) | //sample leading edge
-      (0<<SPR1) | (0<<SPR0) ; //clock speed
+      (0<<SPR1) |
+      (0<<SPR0) ; //clock speed
    SPSR = (0<<SPIF) | //SPI interrupt flag
-      (0<<WCOL) | //Write collision flag
-      (0<<SPI2X) ; //Doubles SPI clock
+          (0<<WCOL) | //Write collision flag
+          (0<<SPI2X); //Doubles SPI clock
 
    PORTB = 1 << SS; // make sure SS is high
 }
