@@ -4,26 +4,24 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-void nibble_print_hello_world();
-void nibble_print(char character);
 
 int main(void) {
    char firstTime = TRUE;
 
    nibble_lcd_init();
    nibble_print_hello_world();
-   /*
-   print_hello_world();
+   //lcd_init();
+   //print_hello_world();
 
    PORTB |= 1 << BUTTON;
 
    while (firstTime) {
       if (PINB & (1 << BUTTON_CHECK)) {
          firstTime = FALSE;
-         print_alt_message();
+         //print_alt_message();
+         nibble_print_alt_message();
       }
    }
-   */
    return 0;
 }
 
