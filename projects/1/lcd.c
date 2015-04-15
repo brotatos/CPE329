@@ -2,10 +2,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-// Wait 2000ns just to be safe instead of 1000ns == T_C.
-#define WAIT_TC() _delay_us(2) // Wait time 2*T_C (2 entire cycle).
 
-static void lcd_cmd(char cmd) {
+void lcd_cmd(char cmd) {
    PORTB = 0;
    E_HIGH(PORTB);
    PORTD = cmd;
@@ -29,20 +27,19 @@ void lcd_write(char character) {
    _delay_us(50); // Wait just in case for sequential writes.
 }
 
-void lcd_init() {
-   UCSR0B = 0; // disable TX, RX
-   /* PB4 = ButtonCheck    IN
-    * PB3 = Button         OUT
-    * PB2 = RS             OUT
-    * PB1 = R/W            OUT
-    * PB0 = E              OUT
-    */
-   DDRB = 0b00001111;
-   DDRD = 0xFF;       // Set all D pins to output
-   // Wait 100 ms for VDD to surpass 4.5V and to end busy state.
-   _delay_ms(100);
+void lcd_print(char *str, int nibble_mode) {
+   while (*str) {
+      if (nibble_mode) {
+         lcd_write(*str & 0xF0);
+         lcd_write((*str++ & 0x0F) << 4);
+      } else {
+         lcd_write(*str++);
+      }
+   }
+}
 
-   PORTB = 0; //  RS, R/W, E = low
+void lcd_init() {
+   DDRD = 0xFF;       // Set all D pins to output
 
    /* Function set
     *

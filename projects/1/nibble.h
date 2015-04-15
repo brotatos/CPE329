@@ -2,6 +2,7 @@
 #define NIBBLE_H
 
 #include "util.h"
+#include "lcd.h"
 
 /* Public functions */
 void nibble_lcd_init(void);

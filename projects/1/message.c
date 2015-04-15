@@ -8,82 +8,50 @@
 int main(void) {
    char firstTime = TRUE;
 
-   nibble_lcd_init();
-   nibble_print_hello_world();
-   //lcd_init();
-   //print_hello_world();
+   UCSR0B = 0; // disable TX, RX
+   /* PB4 = ButtonCheck    IN
+    * PB3 = Button         OUT
+    * PB2 = RS             OUT
+    * PB1 = R/W            OUT
+    * PB0 = E              OUT
+    */
+   DDRB = 0b00001111;
+   // Wait 100 ms for VDD to surpass 4.5V and to end busy state.
+   _delay_ms(100);
+
+   PORTB = 0; //  RS, R/W, E = low
+
+   lcd_init();
+   print_hello_world();
+   //nibble_lcd_init();
+   //nibble_print_hello_world();
 
    PORTB |= 1 << BUTTON;
 
    while (firstTime) {
       if (PINB & (1 << BUTTON_CHECK)) {
          firstTime = FALSE;
-         //print_alt_message();
-         nibble_print_alt_message();
+         print_alt_message();
+         //nibble_print_alt_message();
       }
    }
    return 0;
 }
 
 void print_hello_world() {
-   lcd_write(0x48); // H
-   lcd_write(0x65); // e
-   lcd_write(0x6C); // l
-   lcd_write(0x6C); // l
-   lcd_write(0x6F); // o
-   lcd_write(0x20); // blank
-   lcd_write(0x57); // W
-   lcd_write(0x6F); // o
-   lcd_write(0x72); // r
-   lcd_write(0x6C); // l
-   lcd_write(0x64); // d
-}
-
-void nibble_print(char character) {
-   lcd_write(character & 0xF0);
-   lcd_write((character & 0x0F) << 4);
+   lcd_print("Hello World", FALSE);
 }
 
 void nibble_print_hello_world() {
-   nibble_print(0x48); // H
-   nibble_print(0x65); // e
-   nibble_print(0x6C); // l
-   nibble_print(0x6C); // l
-   nibble_print(0x6F); // o
-   nibble_print(0x20); // blank
-   nibble_print(0x57); // W
-   nibble_print(0x6F); // o
-   nibble_print(0x72); // r
-   nibble_print(0x6C); // l
-   nibble_print(0x64); // d
+   lcd_print("Hello World", TRUE);
 }
 
 void nibble_print_alt_message() {
    nibble_lcd_clear_display();
-   nibble_print(0x57); // W
-   nibble_print(0x6F); // o
-   nibble_print(0x72); // r
-   nibble_print(0x6C); // l
-   nibble_print(0x64); // d
-   nibble_print(0x20); // blank
-   nibble_print(0x48); // H
-   nibble_print(0x65); // e
-   nibble_print(0x6C); // l
-   nibble_print(0x6C); // l
-   nibble_print(0x6F); // o
+   lcd_print("Project 1 done", TRUE);
 }
 
 void print_alt_message() {
    lcd_clear_display();
-   lcd_write(0x57); // W
-   lcd_write(0x6F); // o
-   lcd_write(0x72); // r
-   lcd_write(0x6C); // l
-   lcd_write(0x64); // d
-   lcd_write(0x20); // blank
-   lcd_write(0x48); // H
-   lcd_write(0x65); // e
-   lcd_write(0x6C); // l
-   lcd_write(0x6C); // l
-   lcd_write(0x6F); // o
+   lcd_print("Project 1 done.", FALSE);
 }
