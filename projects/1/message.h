@@ -2,8 +2,7 @@
 #define MESSAGE_H
 
 // Button port on Port B
-#define BUTTON 3
-#define BUTTON_CHECK 4
+#define BUTTON_CHECK 3
 
 void nibble_print_hello_world();
 void nibble_print(char character);

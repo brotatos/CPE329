@@ -9,8 +9,7 @@ int main(void) {
    char firstTime = TRUE;
 
    UCSR0B = 0; // disable TX, RX
-   /* PB4 = ButtonCheck    IN
-    * PB3 = Button         OUT
+   /* PB3 = ButtonCheck    IN
     * PB2 = RS             OUT
     * PB1 = R/W            OUT
     * PB0 = E              OUT
@@ -25,8 +24,6 @@ int main(void) {
    print_hello_world();
    //nibble_lcd_init();
    //nibble_print_hello_world();
-
-   PORTB |= 1 << BUTTON;
 
    while (firstTime) {
       if (PINB & (1 << BUTTON_CHECK)) {
