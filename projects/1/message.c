@@ -1,54 +1,45 @@
 #include "lcd.h"
 #include "message.h"
+#include "display.h"
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-
-int main(void) {
-   char firstTime = TRUE;
-
+void pin_init() {
    UCSR0B = 0; // disable TX, RX
-   /* PB3 = ButtonCheck    IN
+   /* PB3 = ButtonCheck    OUT -> needed for r/w
     * PB2 = RS             OUT
     * PB1 = R/W            OUT
     * PB0 = E              OUT
     */
    DDRB = 0b00001111;
+#if NIBBLE_MODE == FALSE
+   DDRD = 0xFF; // Use the entire data bus.
+#else
+   DDRD = 0xF0; // Use top 4 bits of the data bus.
+#endif
    // Wait 100 ms for VDD to surpass 4.5V and to end busy state.
    _delay_ms(100);
 
    PORTB = 0; //  RS, R/W, E = low
+}
 
+int main(void) {
+   pin_init();
+
+#if NIBBLE_MODE == FALSE
    lcd_init();
-   print_hello_world();
-   //nibble_lcd_init();
-   //nibble_print_hello_world();
+#else
+   nibble_lcd_init();
+#endif
 
-   while (firstTime) {
-      if (PINB & (1 << BUTTON_CHECK)) {
-         firstTime = FALSE;
-         print_alt_message();
-         //nibble_print_alt_message();
-      }
-   }
+   lcd_print(DEFAULT_MESSAGE, NIBBLE_MODE);
+
+#if TOGGLE == FALSE
+   one_shot(TRUE);
+#else
+   toggle(TRUE);
+#endif
+
    return 0;
-}
-
-void print_hello_world() {
-   lcd_print("Hello World", FALSE);
-}
-
-void nibble_print_hello_world() {
-   lcd_print("Hello World", TRUE);
-}
-
-void nibble_print_alt_message() {
-   nibble_lcd_clear_display();
-   lcd_print("Project 1 done", TRUE);
-}
-
-void print_alt_message() {
-   lcd_clear_display();
-   lcd_print("Project 1 done.", FALSE);
 }

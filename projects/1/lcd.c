@@ -11,8 +11,13 @@ void lcd_cmd(char cmd) {
    E_LOW(PORTB);
 }
 
-void lcd_clear_display() {
-   lcd_cmd(1 << PD0);
+void lcd_clear_display(int nibble_mode) {
+   if (nibble_mode) {
+      lcd_cmd(0);
+      lcd_cmd(1 << PD4);
+   } else {
+      lcd_cmd(1 << PD0);
+   }
    _delay_ms(10);
 }
 
@@ -39,8 +44,6 @@ void lcd_print(char *str, int nibble_mode) {
 }
 
 void lcd_init() {
-   DDRD = 0xFF;       // Set all D pins to output
-
    /* Function set
     *
     * PD5: must be high

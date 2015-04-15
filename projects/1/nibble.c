@@ -3,15 +3,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-void nibble_lcd_clear_display() {
-   lcd_cmd(0);
-   lcd_cmd(1 << PD4);
-   _delay_ms(10);
-}
-
 void nibble_lcd_init() {
-   DDRD = 0xF0;       // Set only top 4 D pins to output.
-
    /* Function set
     *
     * PD5: must be high
