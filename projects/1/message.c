@@ -24,22 +24,13 @@ void pin_init() {
    PORTB = 0; //  RS, R/W, E = low
 }
 
+/* Runs the main program. */
 int main() {
    pin_init();
 
-   if (NIBBLE_MODE) {
-      nibble_lcd_init();
-   } else {
-      lcd_init();
-   }
-
+   (NIBBLE_MODE ? nibble_lcd_init : lcd_init)();
    lcd_print(DEFAULT_MESSAGE, NIBBLE_MODE);
-
-   if (TOGGLE) {
-      toggle();
-   } else {
-      one_shot();
-   }
+   (TOGGLE ? toggle : one_shot)();
 
    return 0;
 }
