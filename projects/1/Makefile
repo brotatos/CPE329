@@ -34,6 +34,6 @@ upload: message.hex
 	sudo $(AVR_CC) $(AVRDUDE_FLAGS) -p $(MMCU) -P $(DEV) -b $(BAUD) -U $(MEM):w:$(OUT)
 
 clean:
-	$(RM) *.hex *.o message
+	$(RM) *.hex *.o *.d message
 
 .PHONY: all clean

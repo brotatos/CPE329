@@ -48,7 +48,7 @@ void lcd_print(char *str, int nibble_mode) {
    while (*str) {
       if (nibble_mode) {
          lcd_write(*str & 0xF0);
-         lcd_write((*str++ & 0x0F) << 4);
+         lcd_write(*str++ << 4);
       } else {
          lcd_write(*str++);
       }

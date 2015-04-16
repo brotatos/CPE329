@@ -17,6 +17,4 @@
 // Wait 2000ns just to be safe instead of 1000ns == T_C.
 #define WAIT_TC() _delay_us(2) // Wait time 2*T_C (2 entire cycle).
 
-
-
 #endif
