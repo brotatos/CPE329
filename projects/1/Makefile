@@ -2,7 +2,6 @@ CC=avr-gcc
 F_CPU=16000000UL
 MMCU=atmega328p
 OBJECTS = lcd.o message.o nibble.o display.o
-SRCS = *.c
 CFLAGS=-Os -Wextra -Werror -g -MMD -mmcu=$(MMCU)
 DEV=/dev/ttyACM0
 BAUD=115200
