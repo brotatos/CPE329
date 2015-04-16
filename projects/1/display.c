@@ -14,7 +14,9 @@ void clear_display(char firstTime) {
    }
 }
 
-void one_shot(char firstTime) {
+void one_shot() {
+   char firstTime = TRUE;
+
    while (firstTime) {
       if (BUTTON_PRESSED) {
          firstTime = FALSE;
@@ -24,7 +26,9 @@ void one_shot(char firstTime) {
    }
 }
 
-void toggle(char firstTime) {
+void toggle() {
+   char firstTime = TRUE;
+
    while(TRUE) {
       while (BUTTON_PRESSED) {
          clear_display(firstTime);

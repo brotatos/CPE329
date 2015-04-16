@@ -36,9 +36,9 @@ int main() {
    lcd_print(DEFAULT_MESSAGE, NIBBLE_MODE);
 
    if (TOGGLE) {
-      toggle(TRUE);
+      toggle();
    } else {
-      one_shot(TRUE);
+      one_shot();
    }
 
    return 0;
