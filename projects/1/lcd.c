@@ -3,6 +3,9 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+/* Execute a command by setting the corresponding signals.
+ * This is meant for initialization purposes.
+ */
 void lcd_cmd(char cmd) {
    PORTB = 0;
    E_HIGH(PORTB);
@@ -11,6 +14,10 @@ void lcd_cmd(char cmd) {
    E_LOW(PORTB);
 }
 
+/* Clears the LCD display.
+ * If nibble_mode is true, the display is cleared using the nibble version of
+ * clear display.
+ */
 void lcd_clear_display(int nibble_mode) {
    if (nibble_mode) {
       lcd_cmd(0);
@@ -21,6 +28,7 @@ void lcd_clear_display(int nibble_mode) {
    _delay_ms(10);
 }
 
+/* Writes a single byte to RAM. */
 void lcd_write(char character) {
    PORTB = 0;
    E_HIGH(PORTB);
@@ -32,6 +40,10 @@ void lcd_write(char character) {
    _delay_us(50); // Wait just in case for sequential writes.
 }
 
+/* Takes a string and writes each individual character of it.
+ * If nibble_mode is true, it writes the upper 4 bits and then the lower 4
+ * bits.
+ */
 void lcd_print(char *str, int nibble_mode) {
    while (*str) {
       if (nibble_mode) {
@@ -43,6 +55,7 @@ void lcd_print(char *str, int nibble_mode) {
    }
 }
 
+/* Initializes the LCD with 2-line mode, a cursor, and 8 bit interface. */
 void lcd_init() {
    /* Function set
     *

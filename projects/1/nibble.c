@@ -3,6 +3,8 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+/* Initializes the LCD with 2-line mode, a cursor, and 4 bit (nibble)
+ * interface. */
 void nibble_lcd_init() {
    /* Function set
     *

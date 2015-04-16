@@ -3,7 +3,7 @@
 
 #define BUTTON_PRESSED (PINB & (1 << BUTTON_CHECK))
 
-void clear_display(char firstTime);
+static void clear_display(char firstTime);
 void one_shot();
 void toggle();
 

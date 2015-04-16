@@ -16,7 +16,7 @@ all: upload
 message.hex: message
 	avr-objcopy -O ihex -R .eeprom message $@
 
-message: $(OBJECTS) message.h
+message: $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@
 
 lcd.o: lcd.c
@@ -25,13 +25,13 @@ lcd.o: lcd.c
 message.o: message.c
 	$(CC) $(CFLAGS) -c -o $@ message.c
 
-display.o: display.c message.h
+display.o: display.c
 	$(CC) $(CFLAGS) -c -o $@ display.c
 
-nibble.o: nibble.c message.h
+nibble.o: nibble.c
 	$(CC) $(CFLAGS) -c -o $@ nibble.c
 
-upload: message.hex message.h
+upload: message.hex
 	sudo $(AVR_CC) $(AVRDUDE_FLAGS) -p $(MMCU) -P $(DEV) -b $(BAUD) -U $(MEM):w:$(OUT)
 
 clean:
