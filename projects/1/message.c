@@ -5,6 +5,9 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+const char NIBBLE_MODE = FALSE;
+const char TOGGLE = TRUE;
+
 void pin_init() {
    UCSR0B = 0; // disable TX, RX
    /* PB3 = ButtonCheck    OUT -> needed for r/w
@@ -13,33 +16,30 @@ void pin_init() {
     * PB0 = E              OUT
     */
    DDRB = 0b00001111;
-#if NIBBLE_MODE == FALSE
-   DDRD = 0xFF; // Use the entire data bus.
-#else
-   DDRD = 0xF0; // Use top 4 bits of the data bus.
-#endif
+   // Nibble mode only uses the top 4 pins of PORTD.
+   DDRD = NIBBLE_MODE ? 0xF0 : 0xFF;
    // Wait 100 ms for VDD to surpass 4.5V and to end busy state.
    _delay_ms(100);
 
    PORTB = 0; //  RS, R/W, E = low
 }
 
-int main(void) {
+int main() {
    pin_init();
 
-#if NIBBLE_MODE == FALSE
-   lcd_init();
-#else
-   nibble_lcd_init();
-#endif
+   if (NIBBLE_MODE) {
+      nibble_lcd_init();
+   } else {
+      lcd_init();
+   }
 
    lcd_print(DEFAULT_MESSAGE, NIBBLE_MODE);
 
-#if TOGGLE == FALSE
-   one_shot(TRUE);
-#else
-   toggle(TRUE);
-#endif
+   if (TOGGLE) {
+      toggle(TRUE);
+   } else {
+      one_shot(TRUE);
+   }
 
    return 0;
 }

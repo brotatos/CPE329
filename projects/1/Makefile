@@ -2,6 +2,7 @@ CC=avr-gcc
 F_CPU=16000000UL
 MMCU=atmega328p
 OBJECTS = lcd.o message.o nibble.o display.o
+SRCS = *.c
 CFLAGS=-Os -Wextra -Werror -g -MMD -mmcu=$(MMCU)
 DEV=/dev/ttyACM0
 BAUD=115200
@@ -15,7 +16,7 @@ all: upload
 message.hex: message
 	avr-objcopy -O ihex -R .eeprom message $@
 
-message: $(OBJECTS)
+message: $(OBJECTS) message.h
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@
 
 lcd.o: lcd.c
@@ -24,13 +25,13 @@ lcd.o: lcd.c
 message.o: message.c
 	$(CC) $(CFLAGS) -c -o $@ message.c
 
-display.o: display.c
+display.o: display.c message.h
 	$(CC) $(CFLAGS) -c -o $@ display.c
 
-nibble.o: nibble.c
+nibble.o: nibble.c message.h
 	$(CC) $(CFLAGS) -c -o $@ nibble.c
 
-upload: message.hex
+upload: message.hex message.h
 	sudo $(AVR_CC) $(AVRDUDE_FLAGS) -p $(MMCU) -P $(DEV) -b $(BAUD) -U $(MEM):w:$(OUT)
 
 clean:

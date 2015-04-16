@@ -1,8 +1,12 @@
 #include "util.h"
 #include "message.h"
+#include "display.h"
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+
+extern const char NIBBLE_MODE;
+extern const char TOGGLE;
 
 void clear_display(char firstTime) {
    if (firstTime) {
@@ -12,7 +16,7 @@ void clear_display(char firstTime) {
 
 void one_shot(char firstTime) {
    while (firstTime) {
-      if (PINB & (1 << BUTTON_CHECK)) {
+      if (BUTTON_PRESSED) {
          firstTime = FALSE;
          lcd_clear_display(NIBBLE_MODE);
          lcd_print(ALT_MESSAGE, NIBBLE_MODE);
@@ -22,7 +26,7 @@ void one_shot(char firstTime) {
 
 void toggle(char firstTime) {
    while(TRUE) {
-      while (PINB & (1 << BUTTON_CHECK)) {
+      while (BUTTON_PRESSED) {
          clear_display(firstTime);
          if (firstTime) {
             lcd_print(ALT_MESSAGE, NIBBLE_MODE);
