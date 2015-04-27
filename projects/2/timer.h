@@ -6,6 +6,7 @@ extern const uint8_t OCR0A_MAX;
 extern const int MAX_POINTS;
 extern int squarewave[];
 extern int sawtooth[];
+extern int sinewave[];
 
 void initTimer0(int low);
 void SetClkDiv(int freq_div);
