@@ -2,6 +2,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
+const int MAX_POINTS = 40;
+
 const int squarewave[] = {
    0x000,
    0x000,

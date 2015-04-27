@@ -7,14 +7,13 @@
 #include <util/delay.h>
 
 int main(void) {
-   //int idx = 0;
    pin_init();
    Initialize_SPI_Master();
 
    initTimer0(TRUE);
-   //sei();
+   sei();
 
-   Transmit_SPI_Master(0x1);
+   //Transmit_SPI_Master(0xFFF);
    while(1) {
       //Transmit_SPI_Master(squarewave[idx++]);
       //if (idx == MAX_POINTS) {

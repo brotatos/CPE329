@@ -32,7 +32,7 @@ void initTimer0(int low) {
 ISR(TIMER0_COMPA_vect) {
    Transmit_SPI_Master(squarewave[point_index++]);
 
-   if (point_index == MAX_COUNT) {
+   if (point_index == MAX_POINTS) {
       point_index = 0;
    }
 }
