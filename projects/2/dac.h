@@ -1,7 +1,8 @@
 #ifndef DAC_H
 #define DAC_H
 
-extern const int squarewave[];
+//extern int squarewave[];
 void DrawTriangle();
+//void SetDutyCycle();
 
 #endif
