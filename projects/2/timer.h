@@ -7,6 +7,7 @@ extern const int MAX_POINTS;
 extern int squarewave[];
 extern int sawtooth[];
 extern int sinewave[];
+extern int *current_wave_array;
 
 void initTimer0(int low);
 void SetClkDiv(int freq_div);

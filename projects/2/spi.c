@@ -2,9 +2,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-void pin_init() {
-  DDRB = 1<<MOSI | 1<<SCK | 1<<SS; // make MOSI, SCK and SS outputs
-}
 
 void Initialize_SPI_Master(void) {
    SPCR = (0<<SPIE) | // No interrupts

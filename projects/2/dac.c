@@ -1,8 +1,13 @@
 #include "spi.h"
+#include "dac.h"
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
 
+#define INTERRUPT_DELAY 250
+
 const int MAX_POINTS = 40;
+int *current_wave_array = squarewave;
 
 int squarewave[] = {
    0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000,
@@ -41,4 +46,31 @@ void SetDutyCycle(int duty_cycle) {
    }
 }
 
+wave current_wave = SQUARE;
 
+void ChangeWaveform() {
+   switch (current_wave) {
+      case SQUARE:
+         current_wave_array = squarewave;
+         ++current_wave;
+         break;
+      case SIN:
+         current_wave_array = sinewave;
+         ++current_wave;
+         break;
+      case SAWTOOTH:
+         current_wave_array = sawtooth;
+         current_wave = SQUARE;
+         break;
+   }
+}
+
+void PollChangeWaveform() {
+   if(PINB & 1) {
+      cli();
+      _delay_ms(INTERRUPT_DELAY);
+      ChangeWaveform();
+      _delay_ms(INTERRUPT_DELAY);
+      sei();
+   }
+}

@@ -9,7 +9,6 @@
 #define SCK  5 // PB pin 5
 #define SS   2 // PB pin 2
 
-void pin_init();
 void Initialize_SPI_Master(void);
 // Data is 16-bits.
 void Transmit_SPI_Master(int Data);

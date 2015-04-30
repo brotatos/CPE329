@@ -40,7 +40,7 @@ void initTimer0(int freq_div) {
 }
 
 ISR(TIMER0_COMPA_vect) {
-   Transmit_SPI_Master(sinewave[point_index++]);
+   Transmit_SPI_Master(current_wave_array[point_index++]);
 
    if (point_index == MAX_POINTS) {
       point_index = 0;
