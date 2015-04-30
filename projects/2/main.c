@@ -2,13 +2,20 @@
 #include "dac.h"
 #include "util.h"
 #include "timer.h"
-#include "button_interrupt.h"
+#include "lcd.h"
+#include "nibble.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+#define FREQ (1 << PD3)
+#define DUTY (1 << PD4)
+#define WAVE (1 << PD5)
+
 void pin_init() {
-  DDRB = 1<<MOSI | 1<<SCK | 1<<SS; // make MOSI, SCK and SS outputs
+  DDRB |= 1 << MOSI | 1 << SCK | 1 << SS; // make MOSI, SCK and SS outputs
+  DDRB &= ~WAVE | ~FREQ | ~DUTY;
+  DDRD = 0;
 }
 
 int main(void) {
@@ -17,11 +24,12 @@ int main(void) {
    Initialize_SPI_Master();
 
    initTimer0(64);
-   DDRB &= ~(1 << PB0);
    sei();
 
    while(1) {
-      PollChangeWaveform();
+      PollPinChange(WAVE, ChangeWaveform);
+      PollPinChange(FREQ, SwitchFreq);
+      PollPinChange(DUTY, ChangeDutyCycle);
    }
 
    return 0;

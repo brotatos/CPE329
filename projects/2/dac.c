@@ -3,11 +3,16 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <stdint.h>
 
 #define INTERRUPT_DELAY 250
 
 const int MAX_POINTS = 40;
 int *current_wave_array = squarewave;
+
+const int OCR0A_MAX_VALUES[] = {
+   61, 255, 165, 124, 99
+};
 
 int squarewave[] = {
    0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000,
@@ -46,9 +51,18 @@ void SetDutyCycle(int duty_cycle) {
    }
 }
 
-wave current_wave = SQUARE;
+void ChangeDutyCycle() {
+   static uint16_t current_duty = 6;
+   SetDutyCycle(current_duty++);
+   if (current_duty > 10) {
+      current_duty = 0;
+   }
+}
+
 
 void ChangeWaveform() {
+   static wave current_wave = SIN;
+
    switch (current_wave) {
       case SQUARE:
          current_wave_array = squarewave;
@@ -65,12 +79,40 @@ void ChangeWaveform() {
    }
 }
 
-void PollChangeWaveform() {
-   if(PINB & 1) {
-      cli();
+void ChangeFreq(uint16_t freq, uint8_t index) {
+   SetClkDiv(freq);
+   OCR0A = OCR0A_MAX_VALUES[index];
+}
+
+void SwitchFreq() {
+   static freq current_freq = Hz_200;
+
+   switch (current_freq) {
+      case Hz_100:
+         ChangeFreq(64, current_freq++);
+         break;
+      case Hz_200:
+         ChangeFreq(8, current_freq++);
+         break;
+      case Hz_300:
+         ChangeFreq(8, current_freq++);
+         break;
+      case Hz_400:
+         ChangeFreq(8, current_freq++);
+         break;
+      case Hz_500:
+         ChangeFreq(8, current_freq++);
+         current_freq = Hz_100;
+         break;
+   }
+}
+
+// Pin is a bitmask
+void PollPinChange(uint8_t pin, void (*special_function)()) {
+   if (PIND & pin) {
+      //cli();
+      special_function();
       _delay_ms(INTERRUPT_DELAY);
-      ChangeWaveform();
-      _delay_ms(INTERRUPT_DELAY);
-      sei();
+      //sei();
    }
 }
