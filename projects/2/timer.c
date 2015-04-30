@@ -9,7 +9,7 @@
 const uint8_t OCR0A_MAX = 61;
 int point_index = 0;
 
-void SetClkDiv(int freq_div) {
+void SetClkDiv(uint16_t freq_div) {
    TCCR0B &= ~(0b111);
    switch(freq_div) {
       case 8:
@@ -30,7 +30,7 @@ void SetClkDiv(int freq_div) {
    }
 }
 
-void initTimer0(int freq_div) {
+void initTimer0(uint16_t freq_div) {
    SetClkDiv(freq_div);
    TCCR0B |= 1 << FOC0A;
    TCCR0A = 1 << WGM01 | 1 << COM0A0 | 1 << COM0A1; // CTC, Cmp A mode
@@ -44,5 +44,8 @@ ISR(TIMER0_COMPA_vect) {
 
    if (point_index == MAX_POINTS) {
       point_index = 0;
+      if (current_wave_array == white_noise) {
+         FillWhiteNoise();
+      }
    }
 }

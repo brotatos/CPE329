@@ -3,14 +3,12 @@
 #include <stdint.h>
 
 extern const uint8_t OCR0A_MAX;
-extern const int MAX_POINTS;
-extern int squarewave[];
-extern int sawtooth[];
-extern int sinewave[];
-extern int *current_wave_array;
+extern const uint16_t MAX_POINTS;
+extern uint16_t white_noise[];
+extern uint16_t *current_wave_array;
 
-void initTimer0(int low);
-void SetClkDiv(int freq_div);
+void initTimer0(uint16_t freq);
+void SetClkDiv(uint16_t freq_div);
 void SetDutyCycle();
 
 #endif

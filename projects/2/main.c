@@ -14,12 +14,13 @@
 
 void pin_init() {
   DDRB |= 1 << MOSI | 1 << SCK | 1 << SS; // make MOSI, SCK and SS outputs
-  DDRB &= ~WAVE | ~FREQ | ~DUTY;
-  DDRD = 0;
+  DDRD &= ~FREQ | ~DUTY | ~WAVE;
 }
 
 int main(void) {
    pin_init();
+
+   FillWhiteNoise();
 
    Initialize_SPI_Master();
 
