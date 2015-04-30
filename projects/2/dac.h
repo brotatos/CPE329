@@ -3,10 +3,15 @@
 
 #include <stdint.h>
 
+// Enum for wavewform FSM.
 typedef enum {
    SQUARE, SIN, SAWTOOTH, TRIANGLE, TROCHOID, TRAPEZOID, WHITE_NOISE
 } wave;
-typedef enum {Hz_100, Hz_200, Hz_300, Hz_400, Hz_500} freq;
+
+// Enum for freq FSM.
+typedef enum {
+   Hz_100, Hz_200, Hz_300, Hz_400, Hz_500
+} freq;
 
 void DrawTriangle();
 void SetDutyCycle();
