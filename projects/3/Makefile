@@ -1,7 +1,7 @@
 CC=avr-gcc
 F_CPU=16000000UL
 MMCU=atmega328p
-OBJECTS = spi.o
+OBJECTS = spi.o matrix.o main.o
 CFLAGS=-Os -Wall -Wextra -Werror -g -MMD
 DEV=/dev/ttyACM0
 BAUD=115200
@@ -20,17 +20,17 @@ upload: $(MAIN).hex
 main.hex: $(MAIN)
 	avr-objcopy -O ihex -R .eeprom $(MAIN) $@
 
-main: main.c $(OBJECTS)
-	$(CC) $(CFLAGS) -mmcu=$(MMCU) $(OBJECTS) main.c -o $@
+main: $(OBJECTS)
+	$(CC) $(CFLAGS) -mmcu=$(MMCU) $(OBJECTS) -o $@
 
-#main.o: main.c
-#	$(CC) -Os -mmcu=$(MMCU) -c -o $@ main.c
+main.o: main.c
+	$(CC) -Os -mmcu=$(MMCU) -c -o $@ main.c
 
 spi.o: spi.c
 	$(CC) -Os -mmcu=$(MMCU) -c -o $@ spi.c
 
-#timer.o: timer.c
-#	$(CC) -Os -mmcu=$(MMCU) -c -o $@ timer.c
+matrix.o: matrix.c
+	$(CC) -Os -mmcu=$(MMCU) -c -o $@ matrix.c
 
 clean:
 	$(RM) *.hex *.o *.d main

@@ -1,7 +1,5 @@
 #include "spi.h"
 #include <avr/io.h>
-#include <util/delay.h>
-
 
 void Initialize_SPI_Master(void) {
    // SPI Enable, Master mode
@@ -14,7 +12,14 @@ void Initialize_SPI_Master(void) {
       (0<<CPHA) |     // Sample on leading edge
       (1<<SPR1) |
       (0<<SPR0) ;     // Clock speed
-
    SPSR = 0x00;     //clear flags
+
+   // Set SS, SCK, and MOSI pins to output.
+   DDRB |= 1 << SS | 1 << SCK | 1 << MOSI;
    PORTB = 1 << SS; // make sure SS is high
+}
+
+void spi_send(uint8_t databyte) {
+   SPDR = databyte; // Copy data into the SPI data register
+   while (!(SPSR & (1 << SPIF))); // Wait until transfer is complete
 }
