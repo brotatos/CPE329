@@ -15,7 +15,7 @@ void matrix_clear() {
    uint8_t digit;
 
    // Clear display
-   for (digit = 0; digit < 8; digit++) {
+   for (digit = 0; digit < ALL_DIGITS; digit++) {
       matrix_write(digit + 1, 0);
    }
 }
