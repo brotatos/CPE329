@@ -1,7 +1,7 @@
 CC=avr-gcc
 F_CPU=16000000UL
 MMCU=atmega328p
-OBJECTS = spi.o matrix.o main.o
+OBJECTS = spi.o matrix.o main.o adc.o
 CFLAGS=-Os -Wall -Wextra -Werror -g -MMD
 DEV=/dev/ttyACM0
 BAUD=115200
@@ -24,13 +24,16 @@ main: $(OBJECTS)
 	$(CC) $(CFLAGS) -mmcu=$(MMCU) $(OBJECTS) -o $@
 
 main.o: main.c
-	$(CC) -Os -mmcu=$(MMCU) -c -o $@ main.c
+	$(CC) -Os -mmcu=$(MMCU) -c -o $@ $^
 
 spi.o: spi.c
-	$(CC) -Os -mmcu=$(MMCU) -c -o $@ spi.c
+	$(CC) -Os -mmcu=$(MMCU) -c -o $@ $^
 
 matrix.o: matrix.c
-	$(CC) -Os -mmcu=$(MMCU) -c -o $@ matrix.c
+	$(CC) -Os -mmcu=$(MMCU) -c -o $@ $^
+
+adc.o: adc.c
+	$(CC) -Os -mmcu=$(MMCU) -c -o $@ $^
 
 clean:
 	$(RM) *.hex *.o *.d main

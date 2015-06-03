@@ -7,9 +7,9 @@
 
 // Assumes VDD = 3.3V, your voltages may vary for 5V.
 // Pins are indexed at 0.
-#define MOSI 3 // PB pin 3
-#define SCK  5 // PB pin 5
-#define SS   2 // PB pin 2
+#define MOSI PB3 // PB pin 3
+#define SCK  PB5 // PB pin 5
+#define SS   PB2 // PB pin 2
 
 void Initialize_SPI_Master(void);
 // Data is 16-bits.

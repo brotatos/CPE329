@@ -22,6 +22,11 @@
 #define MAX7219_MODE_SHUTDOWN     0x0C
 #define MAX7219_MODE_DISPLAYTEST  0x0F
 
+#define THRESHOLD 128
+#define MAX_VAL 1023
+#define MAX_INTENSITY 8
+#define ALL_DIGITS 7
+
 void matrix_clear();
 void matrix_init();
 void matrix_write(uint8_t data_register, uint8_t data);
