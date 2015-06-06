@@ -1,3 +1,7 @@
+/* main.c
+ * Main control flow.
+ * authors: Robin Choudhury, Jeffrey Wilson
+ */
 #include "spi.h"
 #include "matrix.h"
 #include "adc.h"

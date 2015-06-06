@@ -1,6 +1,8 @@
 #include "spi.h"
 #include <avr/io.h>
 
+// Initializes SPI to use big-endian order and as the master device.
+// Sets relevant pins on DDRB for use.
 void Initialize_SPI_Master(void) {
    // SPI Enable, Master mode
    //SPCR |= (1 << SPE) | (1 << MSTR)| (1<<SPR1);
@@ -19,6 +21,7 @@ void Initialize_SPI_Master(void) {
    PORTB = 1 << SS; // make sure SS is high
 }
 
+// Sends a single byte via SPI.
 void spi_send(uint8_t databyte) {
    SPDR = databyte; // Copy data into the SPI data register
    while (!(SPSR & (1 << SPIF))); // Wait until transfer is complete

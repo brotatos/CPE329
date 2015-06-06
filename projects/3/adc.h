@@ -1,3 +1,7 @@
+/* adc.h
+ * Contains function declarations for ADC.
+ * authors: Robin Choudhury, Jeffrey Wilson
+ */
 #ifndef _ADC_H_
 #define _ADC_H_
 

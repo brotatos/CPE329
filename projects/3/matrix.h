@@ -1,3 +1,7 @@
+/* matrix.h
+ * Contains function declarations and register addresses for LED Matrix.
+ * authors: Robin Choudhury, Jeffrey Wilson
+ */
 #ifndef MATRIX_H
 #define MATRIX_H
 

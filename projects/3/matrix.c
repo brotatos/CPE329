@@ -1,7 +1,12 @@
+/* matrix.c
+ * Contains functions for interacting with LED matrix.
+ * authors: Robin Choudhury, Jeffrey Wilson
+ */
 #include "matrix.h"
 #include "spi.h"
 #include <avr/io.h>
 
+// Writes a byte to the specified register.
 void matrix_write(uint8_t data_register, uint8_t data) {
    PORTB &= ~(1 << SS); // Assert slave select.
    // Send the register where the data will be stored
@@ -11,6 +16,7 @@ void matrix_write(uint8_t data_register, uint8_t data) {
    PORTB |= 1 << SS; // Turn off slave select.
 }
 
+// Clears out the matrix.
 void matrix_clear() {
    uint8_t digit;
 
@@ -20,6 +26,7 @@ void matrix_clear() {
    }
 }
 
+// Initializes the matrix to use no decoding mode.
 void matrix_init() {
    matrix_write(MAX7219_MODE_SCAN_LIMIT, ALL_DIGITS); // Show all 8 digits.
    // Use binary values for lighting LEDs up.
